@@ -87,7 +87,7 @@ def main():
     positional_args = [('f', '--recursive -f', ['g', 'd', 'ed', 'rm'], res_types + ['all'
                        , 'l', 'sys']), ('l', '-l', ['g', 'd', 'ed', 'rm'], ['f',
                        'all']), ('n', '--namespace', ['g', 'd', 'rm',
-                       'lo', 'ex', 'pf'], ['ns', 'no', 'sys', 'all'])]
+                       'lo', 'ex', 'pf', 'ed'], ['ns', 'no', 'sys', 'all'])]
 
     # [(part, optional, take_exactly_one)]
     parts = [
