@@ -30,13 +30,18 @@ def main():
     # (alias, full, allow_when_oneof, incompatible_with)
     cmds = [('k', 'kubectl', None, None)]
 
-    globs = [('sys', '--namespace=kube-system', None, ['sys'])]
+    globs = [
+        ('sys', '--namespace=kube-system', None, ['sys']),
+        ('def', '--namespace=default', None, ['def']),
+
+    ]
 
     ops = [
         ('a', 'apply --recursive -f', None, None),
-        ('ak', 'apply -k', None, ['sys']),
-        ('k', 'kustomize', None, ['sys']),
+        ('ak', 'apply -k', None, ['sys', 'def']),
+        ('k', 'kustomize', None, ['sys', 'def']),
         ('ex', 'exec -i -t', None, None),
+        ('ed', 'edit', None, None),
         ('lo', 'logs -f', None, None),
         ('lop', 'logs -f -p', None, None),
         ('p', 'proxy', None, ['sys']),
@@ -48,18 +53,20 @@ def main():
         ]
 
     res = [
-        ('po', 'pods', ['g', 'd', 'rm'], None),
-        ('dep', 'deployment', ['g', 'd', 'rm'], None),
-        ('svc', 'service', ['g', 'd', 'rm'], None),
-        ('ing', 'ingress', ['g', 'd', 'rm'], None),
-        ('cm', 'configmap', ['g', 'd', 'rm'], None),
-        ('sec', 'secret', ['g', 'd', 'rm'], None),
-        ('jo', 'job', ['g', 'd', 'rm'], None),
-        ('cj', 'cronjob', ['g', 'd', 'rm'], None),
-        ('pv', 'pv', ['g', 'd', 'rm'], None),
-        ('pvc', 'pvc', ['g', 'd', 'rm'], None),
+        ('po', 'pods', ['g', 'd', 'ed', 'rm'], None),
+        ('dep', 'deployment', ['g', 'd', 'ed', 'rm'], None),
+        ('svc', 'service', ['g', 'd', 'ed', 'rm'], None),
+        ('sts', 'statefulset', ['g', 'd', 'ed', 'rm'], None),
+        ('sa', 'serviceaccount', ['g', 'd', 'ed', 'rm'], None),
+        ('ing', 'ingress', ['g', 'd', 'ed', 'rm'], None),
+        ('cm', 'configmap', ['g', 'd', 'ed', 'rm'], None),
+        ('sec', 'secret', ['g', 'd', 'ed', 'rm'], None),
+        ('jo', 'job', ['g', 'd', 'ed', 'rm'], None),
+        ('cj', 'cronjob', ['g', 'd', 'ed', 'rm'], None),
+        ('pv', 'pv', ['g', 'd', 'ed', 'rm'], None),
+        ('pvc', 'pvc', ['g', 'd', 'ed', 'rm'], None),
         ('no', 'nodes', ['g', 'd'], ['sys']),
-        ('ns', 'namespaces', ['g', 'd', 'rm'], ['sys']),
+        ('ns', 'namespaces', ['g', 'd', 'ed', 'rm'], ['sys']),
         ]
     res_types = [r[0] for r in res]
 
@@ -77,15 +84,15 @@ def main():
 
     # these accept a value, so they need to be at the end and
     # mutually exclusive within each other.
-    positional_args = [('f', '--recursive -f', ['g', 'd', 'rm'], res_types + ['all'
-                       , 'l', 'sys']), ('l', '-l', ['g', 'd', 'rm'], ['f',
+    positional_args = [('f', '--recursive -f', ['g', 'd', 'ed', 'rm'], res_types + ['all'
+                       , 'l', 'sys']), ('l', '-l', ['g', 'd', 'ed', 'rm'], ['f',
                        'all']), ('n', '--namespace', ['g', 'd', 'rm',
                        'lo', 'ex', 'pf'], ['ns', 'no', 'sys', 'all'])]
 
     # [(part, optional, take_exactly_one)]
     parts = [
         (cmds, False, True),
-        (globs, True, False),
+        (globs, True, True),
         (ops, True, True),
         (res, True, True),
         (args, True, False),
