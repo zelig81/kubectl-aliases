@@ -37,8 +37,10 @@ def main():
     ]
 
     ops = [
-        ('a', 'apply --recursive -f', None, None),
+        ('af', 'apply --recursive -f', None, ['sys', 'def']),
+        ('df', 'diff --recursive -f', None, ['sys', 'def']),
         ('ak', 'apply -k', None, ['sys', 'def']),
+        ('dk', 'diff -k', None, ['sys', 'def']),
         ('k', 'kustomize', None, ['sys', 'def']),
         ('ex', 'exec -i -t', None, None),
         ('ed', 'edit', None, None),
@@ -50,7 +52,7 @@ def main():
         ('d', 'describe', None, None),
         ('rm', 'delete', None, None),
         ('run', 'run --rm --restart=Never --image-pull-policy=IfNotPresent -i -t', None, None),
-        ]
+    ]
 
     res = [
         ('po', 'pods', ['g', 'd', 'ed', 'rm'], None),
@@ -74,20 +76,15 @@ def main():
         ('oyaml', '-o=yaml', ['g'], ['owide', 'ojson', 'sl']),
         ('owide', '-o=wide', ['g'], ['oyaml', 'ojson']),
         ('ojson', '-o=json', ['g'], ['owide', 'oyaml', 'sl']),
-        ('all', '--all-namespaces', ['g', 'd'], ['rm', 'f', 'no', 'sys'
-         ]),
-        ('sl', '--show-labels', ['g'], ['oyaml', 'ojson']
-         + diff(res_types, ['po', 'dep'])),
-        ('all', '--all', ['rm'], None), # caution: reusing the alias
+        ('all', '--all-namespaces', ['g', 'd'], ['rm', 'f', 'no', 'sys']),
+        ('sl', '--show-labels', ['g'], ['oyaml', 'ojson'] + diff(res_types, ['po', 'dep'])),
+        ('all', '--all', ['rm'], None),  # caution: reusing the alias
         ('w', '--watch', ['g'], ['oyaml', 'ojson', 'owide']),
-        ]
+    ]
 
     # these accept a value, so they need to be at the end and
     # mutually exclusive within each other.
-    positional_args = [('f', '--recursive -f', ['g', 'd', 'ed', 'rm'], res_types + ['all'
-                       , 'l', 'sys']), ('l', '-l', ['g', 'd', 'ed', 'rm'], ['f',
-                       'all']), ('n', '--namespace', ['g', 'd', 'rm',
-                       'lo', 'ex', 'pf', 'ed'], ['ns', 'no', 'sys', 'all'])]
+    positional_args = [('f', '--recursive -f', ['g', 'd', 'ed', 'rm'], res_types + ['all', 'l', 'sys']), ('l', '-l', ['g', 'd', 'ed', 'rm'], ['f', 'all']), ('n', '--namespace', ['g', 'd', 'rm', 'lo', 'ex', 'pf', 'ed'], ['ns', 'no', 'sys', 'all'])]
 
     # [(part, optional, take_exactly_one)]
     parts = [
@@ -97,7 +94,7 @@ def main():
         (res, True, True),
         (args, True, False),
         (positional_args, True, True),
-        ]
+    ]
 
     out = gen(parts)
 
