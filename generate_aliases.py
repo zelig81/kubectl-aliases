@@ -38,10 +38,7 @@ def main():
 
     ops = [
         ('af', 'apply --recursive -f', None, ['sys', 'def']),
-        ('diff', 'diff --recursive -f', None, ['sys', 'def']),
         ('ak', 'apply -k', None, ['sys', 'def']),
-        ('dk', 'diff -k', None, ['sys', 'def']),
-        ('difk', 'diff -k', None, ['sys', 'def']),
         ('k', 'kustomize', None, ['sys', 'def']),
         ('ex', 'exec -i -t', None, None),
         ('ed', 'edit', None, None),
